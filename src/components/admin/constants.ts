@@ -76,7 +76,7 @@ export const MSG = {
 } as const;
 
 /**
- * Supabase faqat email bilan kiritadi — shuning uchun oddiy login (masalan `dilrabo_kosmetolog`)
+ * Supabase faqat email bilan kiritadi — shuning uchun oddiy login (masalan `ism_familiya`)
  * ichki email’ga aylantiriladi. `.invalid` domeni hech qachon xat qabul qilmaydi (RFC 2606),
  * ya’ni bu manzilga parol tiklash havolasi hech kimga yetib bormaydi.
  */
