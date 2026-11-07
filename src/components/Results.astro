@@ -1,0 +1,27 @@
+---
+import type { Dict } from '../i18n';
+import SectionHeading from './SectionHeading.astro';
+
+interface Props {
+  t: Dict;
+}
+
+const { t } = Astro.props;
+---
+
+<section class="section bg-bg-soft" id="results" aria-labelledby="results-title" data-req="results">
+  <div class="container-x">
+    <div class="section-head is-split">
+      <SectionHeading eyebrow={t.results.eyebrow} title={t.results.title} id="results-title" />
+      <p class="hint max-w-[42ch]" data-reveal>
+        {t.results.note}
+      </p>
+    </div>
+    <ul class="results-grid" data-gallery="results"></ul>
+    <div class="results-more" data-results-more hidden>
+      <button type="button" class="btn btn-secondary">
+        {t.results.more}
+      </button>
+    </div>
+  </div>
+</section>

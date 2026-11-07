@@ -1,0 +1,47 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import Icon, { type IconName } from './Icon.astro';
+
+interface Props extends Omit<HTMLAttributes<'a'>, 'class'> {
+  href: string;
+  variant?: 'primary' | 'secondary';
+  size?: 'md' | 'sm';
+  icon?: IconName;
+  external?: boolean;
+  block?: boolean;
+  class?: string;
+  newTabLabel?: string;
+}
+
+const {
+  href,
+  variant = 'primary',
+  size = 'md',
+  icon,
+  external = false,
+  block = false,
+  class: className,
+  newTabLabel,
+  ...rest
+} = Astro.props;
+---
+
+<a
+  href={href}
+  class:list={[
+    'btn',
+    variant === 'primary' ? 'btn-primary' : 'btn-secondary',
+    size === 'sm' && 'btn-sm',
+    block && 'btn-block',
+    className,
+  ]}
+  target={external ? '_blank' : undefined}
+  rel={external ? 'noopener' : undefined}
+  {...rest}
+>
+  {icon && <Icon name={icon} size={18} />}
+  <span>
+    <slot />
+  </span>
+  {external && newTabLabel && <span class="sr-only">{newTabLabel}</span>}
+</a>

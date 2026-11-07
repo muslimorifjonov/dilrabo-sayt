@@ -1,0 +1,72 @@
+---
+import { has, site } from '../config/site';
+import type { Dict } from '../i18n';
+import { copyrightYears } from '../lib/format';
+import Icon from './Icon.astro';
+
+interface Props {
+  t: Dict;
+}
+
+const { t } = Astro.props;
+const years = copyrightYears(site.since);
+---
+
+<footer class="site-footer">
+  <div class="container-x">
+    <div class="footer-top">
+      <div>
+        <p class="footer-name">{site.name[t.locale]}</p>
+        <p class="footer-tag">{t.footer.tagline}</p>
+      </div>
+      <ul class="footer-icons">
+        <li>
+          <a
+            href={site.instagram.url}
+            target="_blank"
+            rel="noopener"
+            class="icon-circle"
+            aria-label={`${t.common.instagram} @${site.instagram.handle} ${t.common.newTab}`}
+          >
+            <Icon name="instagram" />
+          </a>
+        </li>
+        <li>
+          <a
+            href={`tel:${site.phone.tel}`}
+            class="icon-circle"
+            aria-label={`${t.common.phone}: ${site.phone.display}`}
+          >
+            <Icon name="phone" />
+          </a>
+        </li>
+        {has(site.telegram) && (
+          <li>
+            <a
+              href={site.telegram}
+              target="_blank"
+              rel="noopener"
+              class="icon-circle"
+              aria-label={`${t.common.telegram} ${t.common.newTab}`}
+            >
+              <Icon name="send" />
+            </a>
+          </li>
+        )}
+      </ul>
+    </div>
+
+    <p class="footer-disclaimer">{t.footer.disclaimer}</p>
+
+    <div class="footer-bottom">
+      <p>
+        © <span data-year>{years}</span>
+        {` ${site.name[t.locale]} · ${t.footer.rights}`}
+      </p>
+      <a href="#top" class="link-line inline-flex items-center gap-2">
+        {t.footer.toTop}
+        <Icon name="arrow-up" size={16} />
+      </a>
+    </div>
+  </div>
+</footer>

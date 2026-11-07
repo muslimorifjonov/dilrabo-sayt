@@ -1,0 +1,20 @@
+---
+import { site } from '../config/site';
+import type { Dict } from '../i18n';
+import Button from './Button.astro';
+
+interface Props {
+  t: Dict;
+}
+
+const { t } = Astro.props;
+---
+
+<div class="cta-bar" data-cta-bar inert>
+  <Button href={site.instagram.direct} external icon="instagram" newTabLabel={t.common.newTab}>
+    {t.cta.book}
+  </Button>
+  <Button href={`tel:${site.phone.tel}`} variant="secondary" icon="phone">
+    {t.cta.call}
+  </Button>
+</div>

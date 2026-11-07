@@ -1,0 +1,72 @@
+---
+import { site } from '../config/site';
+import { homePath, type Dict } from '../i18n';
+import Button from './Button.astro';
+import LangSwitch from './LangSwitch.astro';
+import MobileMenu from './MobileMenu.astro';
+import { desktopNav } from './nav';
+
+interface Props {
+  t: Dict;
+}
+
+const { t } = Astro.props;
+const items = desktopNav(t);
+---
+
+<a class="skip-link" href="#main">
+  {t.header.skip}
+</a>
+
+<header class="site-header" data-header>
+  <div class="container-x header-inner">
+    <a href={homePath(t.locale)} class="logo">
+      <span class="logo-name">{site.brand}</span>
+      <span class="logo-sub">{t.logoSub}</span>
+    </a>
+
+    <nav class="desk-nav" aria-label={t.header.navLabel}>
+      <ul>
+        {items.map((item) => (
+          <li data-req-nav={item.req}>
+            <a href={`#${item.id}`} data-nav-link={item.id}>
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="header-actions">
+      <LangSwitch t={t} />
+      <Button
+        href={site.instagram.direct}
+        external
+        icon="instagram"
+        size="sm"
+        class="header-cta"
+        newTabLabel={t.common.newTab}
+      >
+        {t.header.book}
+      </Button>
+      <button
+        type="button"
+        class="burger"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        aria-label={t.header.menuOpen}
+        data-label-open={t.header.menuOpen}
+        data-label-close={t.header.menuClose}
+        data-burger
+      >
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </div>
+  <div class="scroll-progress" aria-hidden="true">
+    <span data-progress></span>
+  </div>
+</header>
+
+<MobileMenu t={t} />

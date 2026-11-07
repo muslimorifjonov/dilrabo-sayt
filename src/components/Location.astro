@@ -1,0 +1,87 @@
+---
+import { has, site } from '../config/site';
+import type { Dict } from '../i18n';
+import Button from './Button.astro';
+import Icon, { type IconName } from './Icon.astro';
+import MapIllustration from './MapIllustration.astro';
+import SectionHeading from './SectionHeading.astro';
+
+interface Props {
+  t: Dict;
+}
+
+const { t } = Astro.props;
+const L = t.locale;
+const l = t.location;
+
+const cabinet = site.address.cabinet[L];
+const street = site.address.street[L];
+const hours = site.hours[L];
+
+const rows: { icon: IconName; label: string; value: string }[] = [
+  ...(has(cabinet) ? [{ icon: 'building' as const, label: l.cabinet, value: cabinet }] : []),
+  {
+    icon: 'map-pin',
+    label: l.address,
+    value: has(street) ? `${l.city}, ${street}` : l.city,
+  },
+  { icon: 'navigation', label: l.landmark, value: l.landmarkValue },
+  { icon: 'clock', label: l.hours, value: has(hours) ? hours : l.hoursFallback },
+];
+---
+
+<section class="section" id="location" aria-labelledby="location-title">
+  <div class="container-x">
+    <div class="section-head">
+      <SectionHeading eyebrow={l.eyebrow} title={l.title} id="location-title" />
+    </div>
+
+    <div class="location-grid">
+      <MapIllustration t={t} />
+
+      <div class="card info-card" data-reveal style="--d:1">
+        <ul>
+          {rows.map((row) => (
+            <li class="info-row">
+              <span class="info-ico">
+                <Icon name={row.icon} />
+              </span>
+              <span>
+                <span class="info-label block">{row.label}</span>
+                <span class="info-value block">{row.value}</span>
+              </span>
+            </li>
+          ))}
+        </ul>
+
+        {(has(site.maps.yandex) || has(site.maps.google)) && (
+          <div class="info-actions">
+            {has(site.maps.yandex) && (
+              <Button
+                href={site.maps.yandex}
+                external
+                icon="navigation"
+                size="sm"
+                newTabLabel={t.common.newTab}
+              >
+                {l.yandex}
+              </Button>
+            )}
+            {has(site.maps.google) && (
+              <Button
+                href={site.maps.google}
+                external
+                variant="secondary"
+                icon="map-pin"
+                size="sm"
+                newTabLabel={t.common.newTab}
+              >
+                {l.google}
+              </Button>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+</section>

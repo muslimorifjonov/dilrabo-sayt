@@ -1,0 +1,54 @@
+---
+import { site } from '../config/site';
+import type { Dict } from '../i18n';
+import Button from './Button.astro';
+import Icon from './Icon.astro';
+import SectionHeading from './SectionHeading.astro';
+
+interface Props {
+  t: Dict;
+}
+
+const { t } = Astro.props;
+---
+
+<section
+  class="section bg-bg-soft"
+  id="reviews"
+  aria-labelledby="reviews-title"
+  data-req="reviews"
+  data-carousel
+>
+  <div class="container-x">
+    <div class="section-head is-split">
+      <div>
+        <SectionHeading eyebrow={t.reviews.eyebrow} title={t.reviews.title} id="reviews-title" />
+        <p class="hint mt-5" data-reveal>
+          {t.reviews.note}
+        </p>
+      </div>
+      <div class="strip-nav" data-reveal>
+        <button type="button" class="round-btn" data-carousel-prev aria-label={t.reviews.prev}>
+          <Icon name="arrow-left" />
+        </button>
+        <button type="button" class="round-btn" data-carousel-next aria-label={t.reviews.next}>
+          <Icon name="arrow-right" />
+        </button>
+      </div>
+    </div>
+
+    <ul class="h-scroll" data-gallery="reviews" data-carousel-track></ul>
+
+    <div class="mt-8 flex justify-center">
+      <Button
+        href={site.instagram.url}
+        external
+        variant="secondary"
+        icon="instagram"
+        newTabLabel={t.common.newTab}
+      >
+        {t.reviews.more}
+      </Button>
+    </div>
+  </div>
+</section>

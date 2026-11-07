@@ -1,0 +1,64 @@
+---
+import Icon from '../components/Icon.astro';
+import { site } from '../config/site';
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+  locale="uz"
+  title="Sahifa topilmadi · Страница не найдена — Dilrabo Raximberdievna"
+  description="Sahifa topilmadi. Страница не найдена."
+  noindex
+  alternates={false}
+>
+  <main id="main" class="relative grid min-h-svh place-items-center overflow-hidden px-5 py-16">
+    <div
+      class="blob"
+      style="width:620px;height:620px;left:-200px;top:-180px"
+      aria-hidden="true"
+    ></div>
+    <div
+      class="blob"
+      style="width:520px;height:520px;right:-180px;bottom:-160px"
+      aria-hidden="true"
+    ></div>
+
+    <div class="relative z-10 w-full max-w-[640px] text-center">
+      <a href="/" class="logo mx-auto items-center">
+        <span class="logo-name">{site.brand}</span>
+        <span class="logo-sub">KOSMETOLOG · TOSHKENT</span>
+      </a>
+
+      <p
+        class="fade-up mt-12 font-display text-[clamp(120px,26vw,220px)] leading-[0.85] text-ink"
+        aria-hidden="true"
+      >
+        4<em class="text-primary">0</em>4
+      </p>
+
+      <h1
+        class="fade-up mt-6 font-display text-[clamp(30px,5vw,44px)] leading-tight"
+        style="--delay:120ms"
+      >
+        Sahifa topilmadi
+      </h1>
+      <p
+        class="fade-up mt-2 font-display text-[clamp(22px,3.6vw,30px)] italic text-ink-soft"
+        style="--delay:200ms"
+        lang="ru"
+      >
+        Страница не найдена
+      </p>
+
+      <div class="fade-up mt-10 flex flex-wrap justify-center gap-3" style="--delay:320ms">
+        <a href="/" class="btn btn-primary">
+          <Icon name="arrow-left" size={18} />
+          <span>Bosh sahifaga qaytish</span>
+        </a>
+        <a href="/ru/" class="btn btn-secondary" lang="ru">
+          <span>На главную</span>
+        </a>
+      </div>
+    </div>
+  </main>
+</Base>

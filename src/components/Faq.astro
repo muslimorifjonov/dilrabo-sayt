@@ -1,0 +1,70 @@
+---
+import { site } from '../config/site';
+import { faq } from '../data/faq';
+import type { Dict } from '../i18n';
+import Button from './Button.astro';
+import SectionHeading from './SectionHeading.astro';
+
+interface Props {
+  t: Dict;
+}
+
+const { t } = Astro.props;
+const L = t.locale;
+---
+
+<section class="section bg-bg-soft" id="faq" aria-labelledby="faq-title">
+  <div class="container-x">
+    <div class="faq-grid">
+      <div class="faq-aside">
+        <SectionHeading eyebrow={t.faq.eyebrow} title={t.faq.title} id="faq-title" />
+        <p class="lead mt-6" data-reveal>
+          {t.faq.lead}
+        </p>
+        <div class="mt-8" data-reveal style="--d:1">
+          <Button
+            href={site.instagram.direct}
+            external
+            variant="secondary"
+            icon="message"
+            newTabLabel={t.common.newTab}
+          >
+            {t.faq.ask}
+          </Button>
+        </div>
+      </div>
+
+      <div class="faq-list" data-faq>
+        {faq.map((item, i) => {
+          const open = i === 0;
+          return (
+            <div
+              class:list={['faq-item', open && 'is-open']}
+              data-reveal
+              style={`--d:${Math.min(i, 4)}`}
+            >
+              <h3>
+                <button
+                  type="button"
+                  class="faq-q"
+                  id={`faq-q-${i}`}
+                  aria-expanded={open ? 'true' : 'false'}
+                  aria-controls={`faq-a-${i}`}
+                  data-faq-toggle
+                >
+                  <span>{item.q[L]}</span>
+                  <span class="faq-plus" aria-hidden="true" />
+                </button>
+              </h3>
+              <div class="faq-panel" id={`faq-a-${i}`} role="region" aria-labelledby={`faq-q-${i}`}>
+                <div>
+                  <p>{item.a[L]}</p>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  </div>
+</section>

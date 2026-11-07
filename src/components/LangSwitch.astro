@@ -1,0 +1,28 @@
+---
+import { homePath, type Dict, type Locale } from '../i18n';
+
+interface Props {
+  t: Dict;
+  class?: string;
+}
+
+const { t, class: className } = Astro.props;
+const items: { locale: Locale; label: string; hreflang: string }[] = [
+  { locale: 'uz', label: 'UZ', hreflang: 'uz' },
+  { locale: 'ru', label: 'RU', hreflang: 'ru' },
+];
+---
+
+<nav class:list={['lang-switch', className]} aria-label={t.header.langLabel}>
+  {items.map((item) => (
+    <a
+      href={homePath(item.locale)}
+      hreflang={item.hreflang}
+      lang={item.hreflang}
+      data-lang-link
+      aria-current={item.locale === t.locale ? 'true' : undefined}
+    >
+      {item.label}
+    </a>
+  ))}
+</nav>

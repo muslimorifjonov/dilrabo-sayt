@@ -1,0 +1,113 @@
+---
+import { getImage, Image } from 'astro:assets';
+import { certificates, certificateSchools, formatCertDate } from '../data/certificates';
+import type { Dict } from '../i18n';
+import Icon from './Icon.astro';
+import SectionHeading from './SectionHeading.astro';
+
+interface Props {
+  t: Dict;
+}
+
+const { t } = Astro.props;
+const lang = t.locale;
+
+/** Lightbox uchun to‘liq o‘lchamli WebP + karta matnlari */
+const items = await Promise.all(
+  certificates.map(async (c) => {
+    const full = await getImage({ src: c.image, format: 'webp', quality: 88 });
+    const kind = c.kind === 'diploma' ? t.certificates.kindDiploma : t.certificates.kindCertificate;
+    const title = c.title[lang];
+    const issuer = c.issuer[lang];
+    const date = c.date ? formatCertDate(c.date) : null;
+    return {
+      id: c.id,
+      image: c.image,
+      fullSrc: full.src,
+      kind,
+      title,
+      issuer,
+      isoDate: c.date,
+      date,
+      alt: `${kind}: ${title} — ${issuer}`,
+      caption: date ? `${issuer} · ${date}` : issuer,
+    };
+  }),
+);
+
+/* Doimiy sertifikatlar bor ekan — bo‘lim va menyu havolasi har doim ko‘rinadi */
+const hasStatic = items.length > 0;
+---
+
+<section
+  class="section bg-bg-soft certs-section"
+  id="certificates"
+  aria-labelledby="certificates-title"
+  data-req={hasStatic ? undefined : 'certificates'}
+>
+  <div class="container-x relative">
+    <div class="section-head is-split">
+      <SectionHeading
+        eyebrow={t.certificates.eyebrow}
+        title={t.certificates.title}
+        id="certificates-title"
+      />
+      <p class="hint" data-reveal>
+        {t.certificates.hint}
+      </p>
+    </div>
+
+    {hasStatic && (
+      <div class="cert-schools" data-reveal>
+        <span class="cert-schools-label">{t.certificates.schoolsLabel}</span>
+        <ul>
+          {certificateSchools.map((s) => (
+            <li>{s}</li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    <ul class="cert-list" data-gallery="certificates">
+      {items.map((c, i) => (
+        <li data-reveal style={`--d:${i % 3}`} data-static>
+          <button
+            type="button"
+            class="zoomable cert-card"
+            data-lb-src={c.fullSrc}
+            data-lb-w={c.image.width}
+            data-lb-h={c.image.height}
+            data-lb-alt={c.alt}
+            data-lb-title={`${c.kind} · ${c.title}`}
+            data-lb-caption={c.caption}
+          >
+            <span class="sr-only">{t.lightbox.open}: </span>
+            <span class="cert-mat">
+              <Image
+                src={c.image}
+                widths={[360, 540, 720]}
+                sizes="(min-width: 1024px) 340px, (min-width: 768px) 44vw, 80vw"
+                alt=""
+                loading="lazy"
+                decoding="async"
+                quality={84}
+                draggable="false"
+              />
+              <span class="zoom-ico" aria-hidden="true">
+                <Icon name="zoom-in" />
+              </span>
+            </span>
+            <span class="cert-body">
+              <span class="cert-meta">
+                <span class="cert-kind">{c.kind}</span>
+                {c.isoDate && <time datetime={c.isoDate}>{c.date}</time>}
+              </span>
+              <span class="cert-title">{c.title}</span>
+              <span class="cert-caption">{c.issuer}</span>
+            </span>
+          </button>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

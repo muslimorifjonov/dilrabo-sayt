@@ -1,0 +1,274 @@
+---
+/**
+ * Stilizatsiyalangan izometrik xarita-illyustratsiya (tashqi iframe emas).
+ * Xarita koordinatalari (0..400) → izometrik proyeksiya: X = 300 + 0.7071(x − y), Y = 64 + 0.41(x + y)
+ * Aniq ko‘cha nomlari faqat [[ANIQ_MANZIL]] berilgandagina yoziladi — shuning uchun bu yerda yo‘q.
+ */
+import type { Dict } from '../i18n';
+
+interface Props {
+  t: Dict;
+}
+
+const { t } = Astro.props;
+
+const W = 600;
+const H = 440;
+const iso = (x: number, y: number): [number, number] => [
+  300 + 0.7071 * (x - y),
+  64 + 0.41 * (x + y),
+];
+const pt = (x: number, y: number, dz = 0) => {
+  const [X, Y] = iso(x, y);
+  return `${X.toFixed(1)},${(Y - dz).toFixed(1)}`;
+};
+const poly = (pts: [number, number][], dz = 0) => pts.map(([x, y]) => pt(x, y, dz)).join(' ');
+
+// Ko‘chalar (markaz chizig‘i va kengligi)
+const roads = [
+  { x0: 0, y0: 140, x1: 400, y1: 140, w: 30 }, // katta ko‘cha (gorizontal)
+  { x0: 210, y0: 0, x1: 210, y1: 400, w: 30 }, // katta ko‘cha (vertikal)
+  { x0: 0, y0: 300, x1: 400, y1: 300, w: 14 },
+  { x0: 330, y0: 0, x1: 330, y1: 400, w: 14 },
+  { x0: 80, y0: 0, x1: 80, y1: 400, w: 14 },
+];
+
+const roadPoly = (r: (typeof roads)[number]) => {
+  const h = r.w / 2;
+  if (r.y0 === r.y1) {
+    return poly([
+      [r.x0, r.y0 - h],
+      [r.x1, r.y0 - h],
+      [r.x1, r.y0 + h],
+      [r.x0, r.y0 + h],
+    ]);
+  }
+  return poly([
+    [r.x0 - h, r.y0],
+    [r.x0 + h, r.y0],
+    [r.x0 + h, r.y1],
+    [r.x0 - h, r.y1],
+  ]);
+};
+
+interface Box {
+  x0: number;
+  y0: number;
+  x1: number;
+  y1: number;
+  h: number;
+  target?: boolean;
+}
+
+// Binolar (bloklar ichida)
+const boxes: Box[] = [
+  { x0: 8, y0: 8, x1: 66, y1: 60, h: 34 },
+  { x0: 8, y0: 72, x1: 66, y1: 122, h: 22 },
+  { x0: 98, y0: 10, x1: 190, y1: 56, h: 46 },
+  { x0: 98, y0: 70, x1: 150, y1: 122, h: 28 },
+  { x0: 160, y0: 76, x1: 192, y1: 122, h: 38 },
+  { x0: 228, y0: 8, x1: 314, y1: 52, h: 30 },
+  { x0: 228, y0: 66, x1: 280, y1: 122, h: 52 },
+  { x0: 346, y0: 10, x1: 392, y1: 120, h: 40 },
+  { x0: 8, y0: 160, x1: 66, y1: 230, h: 26 },
+  { x0: 8, y0: 242, x1: 66, y1: 290, h: 40 },
+  { x0: 98, y0: 160, x1: 190, y1: 206, h: 30 },
+  { x0: 228, y0: 162, x1: 314, y1: 216, h: 34 },
+  { x0: 252, y0: 232, x1: 314, y1: 286, h: 44, target: true },
+  { x0: 346, y0: 160, x1: 392, y1: 286, h: 24 },
+  { x0: 8, y0: 310, x1: 66, y1: 392, h: 30 },
+  { x0: 98, y0: 310, x1: 192, y1: 360, h: 22 },
+  { x0: 228, y0: 310, x1: 316, y1: 392, h: 38 },
+  { x0: 346, y0: 310, x1: 392, y1: 392, h: 28 },
+].sort((a, b) => a.x1 + a.y1 - (b.x1 + b.y1));
+
+// Park (daraxtlar)
+const park = { x0: 98, y0: 218, x1: 192, y1: 290 };
+const trees: [number, number][] = [
+  [112, 232],
+  [140, 228],
+  [170, 236],
+  [120, 262],
+  [152, 258],
+  [180, 270],
+  [134, 284],
+];
+
+const metro = iso(246, 140);
+const target = iso(283, 259);
+const targetTopY = target[1] - 44;
+const route = [iso(246, 140), iso(330, 140), iso(330, 224), iso(283, 224), iso(283, 236)]
+  .map(([x, y], i) => `${i === 0 ? 'M' : 'L'}${x.toFixed(1)} ${y.toFixed(1)}`)
+  .join(' ');
+
+const labelLeft = `${((target[0] / W) * 100).toFixed(2)}%`;
+const labelTop = `${(((targetTopY - 62) / H) * 100).toFixed(2)}%`;
+---
+
+<div class="map-card" data-reveal="scale">
+  <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={t.location.mapLabel}>
+    <defs>
+      <radialGradient id="map-glow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#F3DCDF" stop-opacity="0.9"></stop>
+        <stop offset="100%" stop-color="#F3DCDF" stop-opacity="0"></stop>
+      </radialGradient>
+    </defs>
+
+    <rect width={W} height={H} fill="#F6ECE7"></rect>
+    <ellipse cx={target[0]} cy={target[1]} rx="210" ry="130" fill="url(#map-glow)"></ellipse>
+
+    <!-- Yer -->
+    <polygon
+      points={poly([
+        [0, 0],
+        [400, 0],
+        [400, 400],
+        [0, 400],
+      ])}
+      fill="#FBF7F4"
+      stroke="#EADCD6"
+    ></polygon>
+
+    <!-- Park -->
+    <polygon
+      points={poly([
+        [park.x0, park.y0],
+        [park.x1, park.y0],
+        [park.x1, park.y1],
+        [park.x0, park.y1],
+      ])}
+      fill="#F3DCDF"
+      opacity="0.75"
+    ></polygon>
+
+    <!-- Ko‘chalar -->
+    {roads.map((r) => (
+      <polygon points={roadPoly(r)} fill="#FFFFFF" stroke="#EFD3D7" stroke-width="1" />
+    ))}
+    {roads
+      .filter((r) => r.w > 20)
+      .map((r) => (
+        <line
+          x1={iso(r.x0, r.y0)[0]}
+          y1={iso(r.x0, r.y0)[1]}
+          x2={iso(r.x1, r.y1)[0]}
+          y2={iso(r.x1, r.y1)[1]}
+          stroke="#EFD3D7"
+          stroke-width="1"
+          stroke-dasharray="6 7"
+        />
+      ))}
+
+    <!-- Binolar -->
+    {boxes.map((b) => {
+      const top = poly(
+        [
+          [b.x0, b.y0],
+          [b.x1, b.y0],
+          [b.x1, b.y1],
+          [b.x0, b.y1],
+        ],
+        b.h,
+      );
+      const left = `${pt(b.x0, b.y1)} ${pt(b.x1, b.y1)} ${pt(b.x1, b.y1, b.h)} ${pt(b.x0, b.y1, b.h)}`;
+      const right = `${pt(b.x1, b.y0)} ${pt(b.x1, b.y1)} ${pt(b.x1, b.y1, b.h)} ${pt(b.x1, b.y0, b.h)}`;
+      return (
+        <g>
+          <polygon points={left} fill={b.target ? '#D9A3AE' : '#EFD3D7'} />
+          <polygon points={right} fill={b.target ? '#C98E9C' : '#E6C5CB'} />
+          <polygon
+            points={top}
+            fill={b.target ? '#F3DCDF' : '#FFFFFF'}
+            stroke={b.target ? '#A0526A' : '#EADCD6'}
+            stroke-width="1"
+          />
+        </g>
+      );
+    })}
+
+    <!-- Daraxtlar -->
+    {trees
+      .map(([x, y]) => iso(x, y))
+      .sort((a, b) => a[1] - b[1])
+      .map(([X, Y]) => (
+        <g>
+          <ellipse cx={X} cy={Y + 2} rx="7" ry="3" fill="#D9A3AE" opacity="0.35" />
+          <line x1={X} y1={Y} x2={X} y2={Y - 8} stroke="#C8A26B" stroke-width="1.5" />
+          <circle cx={X} cy={Y - 13} r="8" fill="#D9A3AE" opacity="0.85" />
+          <circle cx={X - 2.5} cy={Y - 15.5} r="3" fill="#FFFFFF" opacity="0.5" />
+        </g>
+      ))}
+
+    <!-- Yo‘l: metro → kabinet -->
+    <path
+      d={route}
+      fill="none"
+      stroke="#A0526A"
+      stroke-width="2.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="map-path"
+    ></path>
+
+    <!-- Metro -->
+    <g transform={`translate(${metro[0].toFixed(1)} ${metro[1].toFixed(1)})`}>
+      <circle r="10" fill="#A0526A" class="map-pulse" opacity="0.4"></circle>
+      <circle r="17" fill="#A0526A" stroke="#FFFFFF" stroke-width="3"></circle>
+      <text
+        y="6"
+        text-anchor="middle"
+        fill="#FFFFFF"
+        style="font: 700 17px var(--font-body-family)"
+      >
+        M
+      </text>
+      <g transform="translate(24 -12)">
+        <rect
+          width={t.location.metroName.length * 7.6 + 22}
+          height="26"
+          rx="13"
+          fill="#FFFFFF"
+          stroke="#EADCD6"
+        ></rect>
+        <text x="11" y="17.5" fill="#3B2A30" style="font: 700 12px var(--font-body-family)">
+          {t.location.metroName}
+        </text>
+      </g>
+    </g>
+
+    <!-- Pin -->
+    <g transform={`translate(${target[0].toFixed(1)} ${targetTopY.toFixed(1)})`}>
+      <ellipse rx="16" ry="6" fill="#A0526A" opacity="0.18"></ellipse>
+      <circle r="9" fill="#A0526A" class="map-pulse"></circle>
+      <g class="map-pin">
+        <path
+          d="M0 0 C -4 -10 -18 -20 -18 -36 A 18 18 0 1 1 18 -36 C 18 -20 4 -10 0 0 Z"
+          fill="#A0526A"
+          stroke="#FFFFFF"
+          stroke-width="2.5"
+        ></path>
+        <circle cy="-36" r="6.5" fill="#FFFFFF"></circle>
+      </g>
+    </g>
+
+    <!-- Kompas -->
+    <g transform="translate(548 52)" opacity="0.9">
+      <circle r="20" fill="#FFFFFF" stroke="#EADCD6"></circle>
+      <path d="M0 -13 L5 0 L0 13 L-5 0 Z" fill="#C8A26B" opacity="0.35"></path>
+      <path d="M0 -13 L5 0 L-5 0 Z" fill="#C8A26B"></path>
+      <text
+        y="-23"
+        text-anchor="middle"
+        fill="#8C6A33"
+        style="font: 700 10px var(--font-body-family)"
+      >
+        N
+      </text>
+    </g>
+  </svg>
+
+  <div class="map-label" style={`left:${labelLeft};top:${labelTop}`} aria-hidden="true">
+    <strong>{t.location.pinLabel}</strong>
+    <span>{t.location.pinSub}</span>
+  </div>
+</div>

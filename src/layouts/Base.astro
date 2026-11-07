@@ -1,0 +1,125 @@
+---
+import cormorant500 from '@fontsource/cormorant-garamond/files/cormorant-garamond-latin-500-normal.woff2?url';
+import manrope400 from '@fontsource/manrope/files/manrope-latin-400-normal.woff2?url';
+import { has, site } from '../config/site';
+import { getDict, homePath, type Locale } from '../i18n';
+import { CACHE_KEY, isSupabaseConfigured } from '../lib/media';
+import '../styles/global.css';
+
+interface Props {
+  locale: Locale;
+  title?: string;
+  description?: string;
+  /** Kanonik yo‘l: '/', '/ru/' */
+  path?: string;
+  noindex?: boolean;
+  alternates?: boolean;
+  jsonLd?: boolean;
+}
+
+const {
+  locale,
+  title: titleProp,
+  description: descProp,
+  path = homePath(locale),
+  noindex = false,
+  alternates = true,
+  jsonLd = false,
+} = Astro.props;
+
+const t = getDict(locale);
+const title = titleProp ?? t.meta.title;
+const description = descProp ?? t.meta.description;
+const siteUrl = Astro.site ?? new URL('https://dilrabocosmetolog.netlify.app');
+const abs = (p: string) => new URL(p, siteUrl).toString();
+const canonical = abs(path);
+const ogImage = abs('/og.jpg');
+
+const street = site.address.street.uz;
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'BeautySalon',
+  name: site.name[locale],
+  description,
+  url: abs(homePath(locale)),
+  image: ogImage,
+  telephone: site.phone.tel,
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Tashkent',
+    addressCountry: 'UZ',
+    ...(has(street) ? { streetAddress: street } : {}),
+  },
+  areaServed: { '@type': 'City', name: 'Tashkent' },
+  sameAs: [site.instagram.url, ...(has(site.telegram) ? [site.telegram] : [])],
+  ...(site.openingHoursSchema.length > 0 ? { openingHours: site.openingHoursSchema } : {}),
+};
+const schemaJson = JSON.stringify(schema).replace(/</g, '\\u003c');
+
+/*
+ * Bo‘yashdan oldin: keshdan rasmli kategoriyalarni aniqlab <html data-m="..."> ga yozadi,
+ * shunda bo‘limlar «sakramaydi» (CLS). Supabase sozlanmagan bo‘lsa — darhol data-m-ready.
+ */
+const bootScript = `(function(){var d=document.documentElement;d.classList.add('js');${
+  isSupabaseConfigured
+    ? `try{var r=localStorage.getItem('${CACHE_KEY}');if(r){var p=JSON.parse(r),s={};if(p&&p.v===1&&p.items){for(var i=0;i<p.items.length;i++){s[p.items[i].category]=1}d.setAttribute('data-m',Object.keys(s).join(' '));d.setAttribute('data-m-ready','')}}}catch(e){}`
+    : ''
+}setTimeout(function(){if(!window.__siteReady)d.classList.remove('js')},4000)})();`;
+---
+
+<!doctype html>
+<html
+  lang={t.htmlLang}
+  data-m=""
+  data-m-ready={isSupabaseConfigured ? undefined : ''}
+  data-locale={locale}
+>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex,nofollow" />}
+    {!noindex && <link rel="canonical" href={canonical} />}
+    {alternates && !noindex && (
+      <>
+        <link rel="alternate" hreflang="uz" href={abs('/')} />
+        <link rel="alternate" hreflang="ru" href={abs('/ru/')} />
+        <link rel="alternate" hreflang="x-default" href={abs('/')} />
+      </>
+    )}
+
+    <meta name="theme-color" content="#FBF7F4" />
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <link rel="preload" href={cormorant500} as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href={manrope400} as="font" type="font/woff2" crossorigin="anonymous" />
+
+    <!-- Open Graph / Twitter -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name[locale]} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={t.ogLocale} />
+    <meta property="og:locale:alternate" content={locale === 'uz' ? 'ru_RU' : 'uz_UZ'} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={t.meta.ogImageAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    {jsonLd && <script type="application/ld+json" set:html={schemaJson} />}
+    <script is:inline set:html={bootScript} />
+    <slot name="head" />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

@@ -1,0 +1,27 @@
+---
+import type { Dict } from '../i18n';
+
+interface Props {
+  t: Dict;
+}
+
+const { t } = Astro.props;
+// Har bir guruh ekrandan kengroq bo‘lishi uchun matnlar ikki marta takrorlanadi
+const group = [...t.marquee, ...t.marquee];
+---
+
+<div class="marquee">
+  <p class="sr-only">{t.marquee.join(' · ')}</p>
+  <div class="marquee-track" aria-hidden="true">
+    {[0, 1].map(() => (
+      <div class="marquee-group">
+        {group.map((item) => (
+          <>
+            <span class="marquee-item">{item}</span>
+            <span class="marquee-sep">◆</span>
+          </>
+        ))}
+      </div>
+    ))}
+  </div>
+</div>

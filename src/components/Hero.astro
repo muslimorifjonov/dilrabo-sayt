@@ -1,0 +1,124 @@
+---
+import { Image } from 'astro:assets';
+import heroPortrait from '../assets/photos/hero-clinic.jpg';
+import { site } from '../config/site';
+import type { Dict } from '../i18n';
+import Button from './Button.astro';
+import Icon from './Icon.astro';
+
+interface Props {
+  t: Dict;
+}
+
+const { t } = Astro.props;
+const letters = site.brand.split('');
+const quick = [
+  { id: 'services', label: t.nav.services },
+  { id: 'results', label: t.nav.results, req: 'results' },
+  { id: 'prices', label: t.nav.prices },
+  { id: 'location', label: t.nav.location },
+];
+---
+
+<section class="hero" id="top" aria-labelledby="hero-title" data-hero>
+  <div class="blob hero-blob parallax" style="--depth: 26px" aria-hidden="true"></div>
+  <svg
+    class="hero-arc parallax"
+    style="--depth: -16px"
+    viewBox="0 0 560 290"
+    fill="none"
+    aria-hidden="true"
+  >
+    <path d="M10 285 A 270 270 0 0 1 550 285" stroke="currentColor" stroke-width="1"></path>
+  </svg>
+
+  <div class="hero-visual">
+    <div class="hero-media" data-hero-media>
+      <div class="hero-media-inner" data-scroll-parallax>
+        <Image
+          src={heroPortrait}
+          widths={[640, 860, 1111]}
+          sizes="(min-width: 1024px) 55vw, 100vw"
+          alt={t.hero.portraitAlt}
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+          quality={84}
+          data-hero-fallback
+        />
+      </div>
+    </div>
+
+    <div class="hero-badge hero-badge--a hero-badge-in" aria-hidden="true">
+      <span class="badge-ico">
+        <Icon name="heart" />
+      </span>
+      <span>
+        <span class="hb-num">{t.hero.badgeClients}</span>
+        <span class="hb-sub">{t.hero.badgeClientsSub}</span>
+      </span>
+    </div>
+    <div class="hero-badge hero-badge--b hero-badge-in" aria-hidden="true">
+      <span class="badge-ico">
+        <Icon name="instagram" />
+      </span>
+      <span>
+        <span class="hb-num">{t.hero.badgeFollowers}</span>
+        <span class="hb-sub">{t.hero.badgeFollowersSub}</span>
+      </span>
+    </div>
+  </div>
+
+  <div class="hero-content container-x">
+    <p class="eyebrow hero-eyebrow fade-up" style="--delay: 60ms">
+      {t.hero.eyebrow}
+    </p>
+
+    <h1 id="hero-title">
+      <span class="sr-only">{t.hero.h1}</span>
+      <span class="hero-name" aria-hidden="true">
+        {letters.map((ch, i) => (
+          <span class="hero-letter" style={`--i:${i}`}>
+            {ch}
+          </span>
+        ))}
+      </span>
+      <span class="hero-second fade-up" style="--delay: 560ms" aria-hidden="true">
+        {site.brandSecond}
+      </span>
+    </h1>
+
+    <p class="hero-lead fade-up" style="--delay: 720ms">
+      {t.hero.lead}
+    </p>
+
+    <div class="hero-actions fade-up" style="--delay: 860ms">
+      <Button href={site.instagram.direct} external icon="instagram" newTabLabel={t.common.newTab}>
+        {t.hero.book}
+      </Button>
+      <Button href={`tel:${site.phone.tel}`} variant="secondary" icon="phone">
+        {t.hero.call}
+      </Button>
+    </div>
+
+    <nav class="hero-quick fade-up" style="--delay: 1000ms" aria-label={t.hero.quickLabel}>
+      {quick.map((q, i) => (
+        <>
+          {i > 0 && (
+            <span class="sep" aria-hidden="true" data-req-nav={q.req}>
+              ◆
+            </span>
+          )}
+          <a href={`#${q.id}`} class="link-line" data-req-nav={q.req}>
+            {q.label}
+          </a>
+        </>
+      ))}
+    </nav>
+  </div>
+
+  <a href="#about" class="hero-scroll fade-up" style="--delay: 1300ms">
+    <span>{t.hero.scroll}</span>
+    <span class="line" aria-hidden="true"></span>
+  </a>
+</section>

@@ -1,0 +1,121 @@
+---
+import { site } from '../config/site';
+import { prices, type PriceCategory, type PriceRow } from '../data/prices';
+import type { Dict } from '../i18n';
+import { formatPrice } from '../lib/format';
+import PromoCard from './PromoCard.astro';
+import SectionHeading from './SectionHeading.astro';
+
+interface Props {
+  t: Dict;
+}
+
+const { t } = Astro.props;
+const p = t.prices;
+const L = t.locale;
+
+type Tab = 'all' | PriceCategory | 'promo';
+const tabs: { id: Tab; label: string }[] = [
+  { id: 'all', label: p.tabs.all },
+  { id: 'care', label: p.tabs.care },
+  { id: 'injection', label: p.tabs.injection },
+  ...(site.promo.active ? [{ id: 'promo' as const, label: p.tabs.promo }] : []),
+];
+
+const groups: { id: PriceCategory; label: string; rows: PriceRow[] }[] = [
+  { id: 'care', label: p.tabs.care, rows: prices.filter((r) => r.category === 'care') },
+  {
+    id: 'injection',
+    label: p.tabs.injection,
+    rows: prices.filter((r) => r.category === 'injection'),
+  },
+];
+
+function priceText(row: PriceRow): { text: string; soft: boolean } {
+  if (typeof row.price === 'number') {
+    return { text: formatPrice(row.price, p, row.from ?? false), soft: false };
+  }
+  if (row.note) return { text: row.note[L], soft: true };
+  return { text: p.consult, soft: true };
+}
+---
+
+<section class="section" id="prices" aria-labelledby="prices-title" data-prices>
+  <div
+    class="blob"
+    style="width:480px;height:480px;left:-160px;bottom:10%"
+    aria-hidden="true"
+  ></div>
+  <div class="container-x relative">
+    <div class="section-head is-split">
+      <SectionHeading eyebrow={p.eyebrow} title={p.title} id="prices-title" />
+      <p class="hint max-w-[40ch]" data-reveal>
+        {p.note}
+      </p>
+    </div>
+
+    <div class="tabs" role="tablist" aria-label={p.tabsLabel} data-reveal>
+      {tabs.map((tab, i) => (
+        <button
+          type="button"
+          class="chip"
+          role="tab"
+          id={`price-tab-${tab.id}`}
+          aria-selected={i === 0 ? 'true' : 'false'}
+          aria-controls="price-panel"
+          tabindex={i === 0 ? 0 : -1}
+          data-tab={tab.id}
+        >
+          {tab.label}
+        </button>
+      ))}
+    </div>
+
+    <div
+      class="price-panel"
+      id="price-panel"
+      role="tabpanel"
+      aria-labelledby="price-tab-all"
+      tabindex="-1"
+      data-price-panel
+    >
+      {site.promo.active && <PromoCard t={t} />}
+
+      <div class="card price-list" data-reveal data-price-list>
+        {groups.map((group) => (
+          <div class="price-group" data-cat={group.id}>
+            <p class="price-group-title">{group.label}</p>
+            {group.rows.map((row) => {
+              const value = priceText(row);
+              return (
+                <>
+                  <div class="price-row">
+                    <span class="price-name">{row.name[L]}</span>
+                    <span class="price-leader" aria-hidden="true" />
+                    <span class:list={['price-value', value.soft && 'is-soft']}>{value.text}</span>
+                  </div>
+                  {row.children && (
+                    <div class="price-children">
+                      {row.children.map((child) => {
+                        const cv = priceText(child);
+                        return (
+                          <div class="price-row">
+                            <span class="price-name">{child.name[L]}</span>
+                            <span class="price-leader" aria-hidden="true" />
+                            <span class:list={['price-value', cv.soft && 'is-soft']}>
+                              {cv.text}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </>
+              );
+            })}
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

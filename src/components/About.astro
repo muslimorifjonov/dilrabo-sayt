@@ -1,0 +1,148 @@
+---
+import { getImage, Image } from 'astro:assets';
+import atWork from '../assets/photos/at-work.jpg';
+import aboutPortrait from '../assets/photos/about-portrait.jpg';
+import { site } from '../config/site';
+import type { Dict } from '../i18n';
+import ClinicStrip from './ClinicStrip.astro';
+import Icon from './Icon.astro';
+import SectionHeading from './SectionHeading.astro';
+
+interface Props {
+  t: Dict;
+}
+
+const { t } = Astro.props;
+
+/** «Ish jarayonida» rasmi bosilganda lightbox’da ochiladigan to‘liq versiya */
+const atWorkFull = await getImage({ src: atWork, format: 'webp', quality: 88 });
+
+interface Stat {
+  value: string;
+  label: string;
+  count?: number;
+  decimals?: number;
+  suffix?: string;
+}
+
+const clientsNum = Number.parseInt(site.clients, 10);
+const followersNum = Number.parseFloat(site.instagram.followers);
+const followersSuffix = site.instagram.followers.replace(/[\d.,\s]/g, '');
+
+const stats: Stat[] = [
+  {
+    value: site.clients,
+    label: t.about.statClientsLabel,
+    count: Number.isFinite(clientsNum) ? clientsNum : undefined,
+    suffix: site.clients.replace(/\d/g, ''),
+  },
+  { value: t.about.statEduValue, label: t.about.statEduLabel },
+  site.experienceYears
+    ? {
+        value: `${site.experienceYears}+`,
+        label: t.about.statExpLabel,
+        count: site.experienceYears,
+        suffix: '+',
+      }
+    : {
+        value: site.instagram.followers,
+        label: t.about.statFollowersLabel,
+        count: Number.isFinite(followersNum) ? followersNum : undefined,
+        decimals: 1,
+        suffix: followersSuffix,
+      },
+];
+---
+
+<section class="section" id="about" aria-labelledby="about-title">
+  <div class="blob" style="width:520px;height:520px;right:-180px;top:40px" aria-hidden="true"></div>
+  <div class="container-x relative">
+    <div class="about-grid">
+      <div class="about-photo" data-reveal="scale">
+        <div class="about-frame" data-about-frame>
+          <Image
+            src={aboutPortrait}
+            widths={[480, 720]}
+            sizes="(min-width: 1024px) 470px, calc(100vw - 52px)"
+            alt={t.about.portraitAlt}
+            loading="lazy"
+            decoding="async"
+            quality={86}
+            data-about-fallback
+          />
+        </div>
+
+        <button
+          type="button"
+          class="zoomable about-inset"
+          data-static-zoom
+          data-lb-src={atWorkFull.src}
+          data-lb-w={atWork.width}
+          data-lb-h={atWork.height}
+          data-lb-alt={t.about.atWorkAlt}
+          data-lb-title={t.about.atWork}
+          aria-label={`${t.lightbox.open}: ${t.about.atWorkAlt}`}
+        >
+          <span class="about-inset-media">
+            <Image
+              src={atWork}
+              widths={[240, 360, 480]}
+              sizes="(min-width: 1024px) 220px, 42vw"
+              alt=""
+              loading="lazy"
+              decoding="async"
+              quality={84}
+              draggable="false"
+            />
+          </span>
+          <span class="about-inset-label" aria-hidden="true">
+            <span class="dot"></span>
+            {t.about.atWork}
+          </span>
+          <span class="zoom-ico" aria-hidden="true">
+            <Icon name="zoom-in" />
+          </span>
+        </button>
+
+        <div class="ring-badge" aria-hidden="true">
+          <svg viewBox="0 0 120 120">
+            <defs>
+              <path id="ring-path" d="M60,60 m-48,0 a48,48 0 1,1 96,0 a48,48 0 1,1 -96,0"></path>
+            </defs>
+            <text>
+              <textPath href="#ring-path" textLength="300" lengthAdjust="spacing">
+                {t.about.ring}
+              </textPath>
+            </text>
+          </svg>
+          <span class="mono">D</span>
+        </div>
+      </div>
+
+      <div>
+        <SectionHeading eyebrow={t.about.eyebrow} title={t.about.title} id="about-title" />
+        <p class="mt-6 max-w-[60ch] text-ink-soft" data-reveal style="--d:2">
+          {t.about.text}
+        </p>
+
+        <ul class="stats">
+          {stats.map((s, i) => (
+            <li class="card stat" data-reveal style={`--d:${i + 3}`}>
+              <span
+                class="stat-value"
+                data-count={s.count}
+                data-decimals={s.decimals}
+                data-suffix={s.suffix}
+              >
+                {s.value}
+              </span>
+              <span class="stat-label">{s.label}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+
+    <ClinicStrip t={t} />
+  </div>
+</section>

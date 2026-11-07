@@ -1,0 +1,41 @@
+---
+import { services } from '../data/services';
+import type { Dict } from '../i18n';
+import SectionHeading from './SectionHeading.astro';
+
+interface Props {
+  t: Dict;
+}
+
+const { t } = Astro.props;
+const num = (i: number) => String(i + 1).padStart(2, '0');
+---
+
+<section class="section" id="services" aria-labelledby="services-title">
+  <div class="container-x">
+    <div class="section-head is-split">
+      <SectionHeading eyebrow={t.services.eyebrow} title={t.services.title} id="services-title" />
+      <p class="lead" data-reveal>
+        {t.services.lead}
+      </p>
+    </div>
+
+    <ul class="services-grid" data-spotlight>
+      {services.map((s, i) => (
+        <li data-reveal style={`--d:${i % 4}`}>
+          <article class="card card-hover svc-card">
+            <span class="svc-num" aria-hidden="true">
+              {num(i)}
+            </span>
+            <span class="gold-rule" aria-hidden="true" />
+            <h3 class="h3">{s.name[t.locale]}</h3>
+            <p class="svc-text">{s.text[t.locale]}</p>
+            <span class="svc-ghost" aria-hidden="true">
+              {num(i)}
+            </span>
+          </article>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

@@ -1,0 +1,51 @@
+---
+import { splitAccent } from '../i18n';
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  id?: string;
+  class?: string;
+  titleClass?: string;
+}
+
+const { eyebrow, title, id, class: className, titleClass } = Astro.props;
+
+interface Token {
+  text: string;
+  accent: boolean;
+  space: boolean;
+  index: number;
+}
+
+let wordIndex = 0;
+const tokens: Token[] = splitAccent(title).flatMap((part) =>
+  part.text
+    // Faqat oddiy bo‘shliq bo‘yicha: NBSP (U+00A0) so‘zlarni bog‘lab qoladi («mijozlar — »)
+    .split(/( +)/)
+    .filter((chunk) => chunk.length > 0)
+    .map((chunk) => {
+      const space = /^ +$/.test(chunk);
+      return { text: chunk, accent: part.accent, space, index: space ? -1 : wordIndex++ };
+    }),
+);
+---
+
+<div class:list={['heading', className]}>
+  <p class="eyebrow" data-reveal="fade">
+    {eyebrow}
+  </p>
+  <h2 class:list={['h2 mt-4', titleClass]} id={id} data-reveal="title">
+    {tokens.map((tok) =>
+      tok.space ? (
+        ' '
+      ) : (
+        <span class="wm">
+          <span class="w" style={`--wi:${tok.index}`}>
+            {tok.accent ? <em>{tok.text}</em> : tok.text}
+          </span>
+        </span>
+      ),
+    )}
+  </h2>
+</div>

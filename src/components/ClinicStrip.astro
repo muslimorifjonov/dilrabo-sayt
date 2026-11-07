@@ -1,0 +1,28 @@
+---
+import type { Dict } from '../i18n';
+import Icon from './Icon.astro';
+
+interface Props {
+  t: Dict;
+}
+
+const { t } = Astro.props;
+---
+
+<div class="clinic-strip" data-req="clinic" data-carousel>
+  <div class="strip-head">
+    <div>
+      <p class="eyebrow">{t.about.clinicEyebrow}</p>
+      <h3 class="h3 mt-3">{t.about.clinicTitle}</h3>
+    </div>
+    <div class="strip-nav">
+      <button type="button" class="round-btn" data-carousel-prev aria-label={t.lightbox.prev}>
+        <Icon name="arrow-left" />
+      </button>
+      <button type="button" class="round-btn" data-carousel-next aria-label={t.lightbox.next}>
+        <Icon name="arrow-right" />
+      </button>
+    </div>
+  </div>
+  <ul class="h-scroll" data-gallery="clinic" data-carousel-track></ul>
+</div>

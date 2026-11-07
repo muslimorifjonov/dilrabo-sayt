@@ -1,0 +1,85 @@
+---
+import { has, site } from '../config/site';
+import type { Dict } from '../i18n';
+import Icon from './Icon.astro';
+import SectionHeading from './SectionHeading.astro';
+
+interface Props {
+  t: Dict;
+}
+
+const { t } = Astro.props;
+const c = t.contact;
+---
+
+<section class="section" id="contact" aria-labelledby="contact-title" data-contact>
+  <div class="container-x">
+    <div class="contact-panel on-blush" data-reveal="scale">
+      <div class="contact-grid">
+        <div>
+          <SectionHeading eyebrow={c.eyebrow} title={c.title} id="contact-title" />
+          <p class="contact-text" data-reveal style="--d:1">
+            {c.text}
+          </p>
+        </div>
+
+        <div class="contact-cards">
+          <a
+            href={site.instagram.direct}
+            target="_blank"
+            rel="noopener"
+            class="contact-card is-primary"
+            data-reveal
+            style="--d:1"
+          >
+            <span class="cc-ico">
+              <Icon name="instagram" />
+            </span>
+            <span>
+              <span class="cc-title">{c.bookTitle}</span>
+              <span class="cc-sub">{c.bookSub}</span>
+            </span>
+            <Icon name="arrow-up-right" class="cc-arrow" />
+            <span class="sr-only">{t.common.newTab}</span>
+          </a>
+
+          <a href={`tel:${site.phone.tel}`} class="contact-card" data-reveal style="--d:2">
+            <span class="cc-ico">
+              <Icon name="phone" />
+            </span>
+            <span>
+              <span class="cc-title">{c.callTitle}</span>
+              <span class="cc-sub">{site.phone.display}</span>
+            </span>
+            <Icon name="arrow-up-right" class="cc-arrow" />
+          </a>
+
+          {has(site.telegram) && (
+            <a
+              href={site.telegram}
+              target="_blank"
+              rel="noopener"
+              class="contact-card"
+              data-reveal
+              style="--d:3"
+            >
+              <span class="cc-ico">
+                <Icon name="send" />
+              </span>
+              <span>
+                <span class="cc-title">{c.telegramTitle}</span>
+                <span class="cc-sub">{c.telegramSub}</span>
+              </span>
+              <Icon name="arrow-up-right" class="cc-arrow" />
+              <span class="sr-only">{t.common.newTab}</span>
+            </a>
+          )}
+        </div>
+      </div>
+
+      <span class="watermark" data-watermark aria-hidden="true">
+        {site.brand}
+      </span>
+    </div>
+  </div>
+</section>

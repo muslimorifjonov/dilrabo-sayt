@@ -1,0 +1,54 @@
+---
+import { site } from '../config/site';
+import type { Dict } from '../i18n';
+import { formatPrice } from '../lib/format';
+import Button from './Button.astro';
+import Icon from './Icon.astro';
+
+interface Props {
+  t: Dict;
+}
+
+const { t } = Astro.props;
+const p = t.prices;
+---
+
+<article class="promo-card" data-cat="promo" aria-labelledby="promo-title">
+  <div class="promo-inner">
+    <Icon name="sparkle" size={22} class="sparkle right-[8%] top-[12%]" />
+    <Icon name="sparkle" size={14} class="sparkle right-[18%] top-[30%] [animation-delay:-1.2s]" />
+    <Icon name="sparkle" size={16} class="sparkle bottom-[14%] right-[6%] [animation-delay:-2s]" />
+
+    <div class="relative">
+      <span class="promo-badge">{p.promo.badge}</span>
+      <h3 class="promo-title" id="promo-title">
+        {p.promo.title}
+      </h3>
+      <p class="promo-includes mt-4">{p.promo.includesLabel}</p>
+      <ul class="promo-list">
+        {p.promo.items.map((item) => (
+          <li>{item}</li>
+        ))}
+      </ul>
+      <div class="promo-foot">
+        <span class="promo-price">{formatPrice(site.promo.price, p)}</span>
+        <span class="promo-gift">
+          <Icon name="gift" />
+          {p.promo.gift}
+        </span>
+      </div>
+      <div class="mt-7">
+        <Button
+          href={site.instagram.direct}
+          external
+          icon="instagram"
+          newTabLabel={t.common.newTab}
+        >
+          {p.promo.cta}
+        </Button>
+      </div>
+    </div>
+
+    <div class="promo-media" data-req="promo" data-gallery="promo"></div>
+  </div>
+</article>

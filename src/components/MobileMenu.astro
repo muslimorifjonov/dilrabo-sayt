@@ -1,0 +1,49 @@
+---
+import { site } from '../config/site';
+import type { Dict } from '../i18n';
+import Button from './Button.astro';
+import { mobileNav } from './nav';
+
+interface Props {
+  t: Dict;
+}
+
+const { t } = Astro.props;
+const items = mobileNav(t);
+---
+
+<div class="mobile-menu" id="mobile-menu" inert data-mobile-menu>
+  <div class="container-x flex min-h-full flex-col">
+    <nav aria-label={t.header.navLabel}>
+      <ol>
+        {items.map((item, i) => (
+          <li class="menu-item" style={`--i:${i}`} data-req-nav={item.req}>
+            <a href={`#${item.id}`} data-menu-link>
+              <span class="num" aria-hidden="true" />
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+
+    <div class="mobile-menu-foot menu-item" style={`--i:${items.length}`}>
+      <a
+        href={`tel:${site.phone.tel}`}
+        class="font-display text-[28px] leading-none text-ink no-underline"
+        aria-label={`${t.header.phoneLabel}: ${site.phone.display}`}
+      >
+        {site.phone.display}
+      </a>
+      <Button
+        href={site.instagram.direct}
+        external
+        icon="instagram"
+        block
+        newTabLabel={t.common.newTab}
+      >
+        {t.header.book}
+      </Button>
+    </div>
+  </div>
+</div>
