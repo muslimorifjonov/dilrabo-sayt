@@ -5,6 +5,9 @@
 [build.environment]
   # Astro 7 Node >= 22.23.4 talab qiladi — 24 (LTS) eng xavfsiz tanlov.
   NODE_VERSION = "24"
+  # Bucket nomi sir emas (README’da misol sifatida yozilgan) — maxfiy kalitlar tekshiruvidan chiqariladi.
+  # R2_ACCESS_KEY_ID / R2_SECRET_ACCESS_KEY tekshiruvda qoladi.
+  SECRETS_SCAN_OMIT_KEYS = "R2_BUCKET"
 
 [functions]
   directory = "netlify/functions"
