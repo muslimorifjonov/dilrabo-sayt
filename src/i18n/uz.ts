@@ -74,7 +74,7 @@ export const uz: Dict = {
     clinicTitle: 'Kabinet va ish jarayoni',
     clinicAlt: 'Dilrabo Raximberdievna kabineti va ish jarayoni',
     atWork: 'Ish jarayonida',
-    atWorkAlt: 'Dilrabo Raximberdievna muolaja o‘tkazmoqda',
+    atWorkAlt: 'Dilrabo Raximberdievna klinikada, oq xalatda',
   },
 
   certificates: {
