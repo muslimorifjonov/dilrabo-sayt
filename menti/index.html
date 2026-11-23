@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Sado — jonli so'rovnoma va viktorina platformasi</title>
+  <meta name="description" content="Sado — auditoriya bilan jonli muloqot: so'rovnomalar, viktorinalar, so'z buluti va savol-javob. Ishtirokchilarga faqat 6 xonali kod kerak." />
+  <meta name="theme-color" content="#7c3aed" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Unbounded:wght@500;600;700;800&display=swap" />
+  <script type="module" src="/src/pages/home.js"></script>
+</head>
+<body>
+<header class="topbar"><div class="container">
+  <a class="logo" href="/"><i></i>Sado<small>Live</small></a>
+  <span class="spacer"></span>
+  <nav class="row" id="nav"></nav>
+  <button class="icon-btn" data-theme-toggle aria-label="Yorug' / qorong'i rejim">◐</button>
+</div></header>
+
+<main class="container">
+  <section class="hero">
+    <div>
+      <span class="pill" data-reveal><span class="dot"></span> Natijalar real vaqtda, soniyalar ichida</span>
+      <h1 data-reveal>Har bir tinglovchining <span class="grad-text">ovozi eshitilsin</span></h1>
+      <p class="lead" data-reveal>Sado yordamida dars, yig'ilish yoki tadbirda auditoriyaga savol bering. Ular telefondan javob beradi, natijalar esa ekranda jonli grafik bo'lib chiqadi. Ro'yxatdan o'tish ham, ilova o'rnatish ham shart emas.</p>
+      <div class="hero-cta" data-reveal>
+        <a class="btn primary lg" href="/dashboard.html">Bepul boshlash →</a>
+        <a class="btn ghost lg" href="#how">Qanday ishlaydi?</a>
+      </div>
+      <div class="trust" data-reveal><span>Bepul</span><span>Ilova kerak emas</span><span>Telefon va kompyuterda</span></div>
+    </div>
+
+    <div class="demo" data-reveal aria-hidden="true">
+      <div class="card demo-screen">
+        <div class="demo-head"><i></i><i></i><i></i><span class="spacer"></span><span class="badge live">JONLI</span></div>
+        <div class="demo-q">Bugungi dars sizga qanday bo'ldi?</div>
+        <div class="demo-bars" id="demo-bars">
+          <div style="--c: var(--c0)"></div><div style="--c: var(--c1)"></div><div style="--c: var(--c2)"></div><div style="--c: var(--c3)"></div>
+        </div>
+        <div class="demo-labels"><span>Ajoyib</span><span>Yaxshi</span><span>O'rtacha</span><span>Qiyin</span></div>
+      </div>
+      <div class="card demo-phone">
+        <div class="small muted center">Kod</div>
+        <div class="code">482 913</div>
+        <div class="opt on">Ajoyib 🔥</div><div class="opt">Yaxshi</div><div class="opt">O'rtacha</div>
+      </div>
+      <div id="floaters"></div>
+    </div>
+  </section>
+
+  <section class="card join-strip" data-reveal id="join">
+    <div>
+      <h2>Taqdimotga qo'shilmoqchimisiz?</h2>
+      <p class="muted small" style="margin:0">Taqdimotchi ekranida ko'rsatilgan 6 xonali kodni yozing va javob bering.</p>
+    </div>
+    <form class="join-form" id="join-form" novalidate>
+      <input class="input code-input" id="code" inputmode="numeric" autocomplete="off" maxlength="7" placeholder="123 456" aria-label="Taqdimot kodi" />
+      <button class="btn primary lg" type="submit">Qo'shilish</button>
+    </form>
+  </section>
+
+  <section class="section" id="how">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow">Qanday ishlaydi</span>
+      <h2>Uch qadam, bir daqiqa</h2>
+      <p>Texnik bilim kerak emas. Agar slayd tayyorlay olsangiz, Sado'dan ham bemalol foydalana olasiz.</p>
+    </div>
+    <div class="steps">
+      <div class="card step" data-reveal><h3>Savollarni tayyorlang</h3><p>So'rovnoma, viktorina yoki so'z bulutini tanlang va savolingizni yozing. Tayyor shablonlardan ham boshlashingiz mumkin.</p></div>
+      <div class="card step" data-reveal><h3>Kodni ko'rsating</h3><p>Taqdimotni boshlang. Ekranda 6 xonali kod va QR chiqadi. Tinglovchilar telefonidan kiradi.</p></div>
+      <div class="card step" data-reveal><h3>Natijani birga ko'ring</h3><p>Har bir javob shu zahoti ekranda paydo bo'ladi. Muhokama qiling, xulosa chiqaring, natijani Excel'ga yuklab oling.</p></div>
+    </div>
+  </section>
+
+  <section class="section" id="features">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow">Imkoniyatlar</span>
+      <h2>Auditoriyani jonlantirish uchun hamma narsa</h2>
+      <p>Har bir slayd turi o'z vazifasini bajaradi: fikr yig'ish, bilimni tekshirish yoki savollarga javob berish.</p>
+    </div>
+    <div class="features">
+      <div class="card feature glow-card" data-reveal><div class="ico">📊</div><h3>So'rovnoma</h3><p>Variantlardan birini tanlashadi, natija ustunli grafikda o'sib boradi.</p></div>
+      <div class="card feature glow-card" data-reveal><div class="ico">🏆</div><h3>Viktorina va reyting</h3><p>Taymer, to'g'ri javob, tezlik uchun ochko va g'oliblar jadvali.</p></div>
+      <div class="card feature glow-card" data-reveal><div class="ico">☁️</div><h3>So'z buluti</h3><p>Eng ko'p aytilgan so'zlar kattaroq ko'rinadi, ya'ni umumiy fikr bir qarashda.</p></div>
+      <div class="card feature glow-card" data-reveal><div class="ico">🙋</div><h3>Savol-javob</h3><p>Anonim savollar va ularga ovoz berish. Eng muhim savol tepada turadi.</p></div>
+      <div class="card feature glow-card" data-reveal><div class="ico">💬</div><h3>Ochiq javoblar</h3><p>Erkin fikrlar ekranda rangli kartochkalar devori bo'lib chiqadi.</p></div>
+      <div class="card feature glow-card" data-reveal><div class="ico">📏</div><h3>Baholash shkalasi</h3><p>Har bir fikrni 1–10 oralig'ida baholash va o'rtacha ballni ko'rish.</p></div>
+      <div class="card feature glow-card" data-reveal><div class="ico">📱</div><h3>QR orqali kirish</h3><p>Kamerani yo'naltirish kifoya, kod yozish ham shart emas.</p></div>
+      <div class="card feature glow-card" data-reveal><div class="ico">📥</div><h3>Excel'ga eksport</h3><p>Barcha javoblar ism va vaqt bilan bitta CSV faylga yuklanadi.</p></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow">Kim uchun</span>
+      <h2>Sinfdan konferensiya zaligacha</h2>
+    </div>
+    <div class="usecases">
+      <div class="card usecase glow-card" data-reveal><div class="big">🎓</div><h3>O'qituvchilar</h3><ul><li>Darsni viktorina bilan yakunlang</li><li>Kim tushunmaganini darhol biling</li><li>Uyatchan o'quvchilar ham qatnashadi</li></ul></div>
+      <div class="card usecase glow-card" data-reveal><div class="big">💼</div><h3>Jamoalar</h3><ul><li>Yig'ilishda tez qaror qabul qiling</li><li>Anonim fikr-mulohaza yig'ing</li><li>Rahbariyatga savollar</li></ul></div>
+      <div class="card usecase glow-card" data-reveal><div class="big">🎤</div><h3>Tadbirlar</h3><ul><li>Zal bilan jonli muloqot</li><li>Ma'ruzachiga savollar</li><li>Tadbirni baholash</li></ul></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow">Savollar</span>
+      <h2>Ko'p beriladigan savollar</h2>
+    </div>
+    <div class="faq">
+      <details class="card" data-reveal><summary>Ishtirokchilar ro'yxatdan o'tishi kerakmi?</summary><p>Yo'q. Ular faqat 6 xonali kodni yozadi yoki QR'ni skanerlaydi. Xohlasa ismini yozadi, xohlamasa "Mehmon" sifatida qatnashadi.</p></details>
+      <details class="card" data-reveal><summary>Bir kishi bir necha marta ovoz bera oladimi?</summary><p>Yo'q. Har bir ishtirokchi (brauzer) har bir savolga faqat bir marta javob beradi. Bu server tomonida nazorat qilinadi, natijalar halol bo'ladi.</p></details>
+      <details class="card" data-reveal><summary>Nechta odam qatnasha oladi?</summary><p>Oddiy dars yoki yig'ilish uchun cheklov sezilmaydi. Natijalar hamma uchun bir vaqtda yangilanadi.</p></details>
+      <details class="card" data-reveal><summary>Viktorinada ochko qanday hisoblanadi?</summary><p>To'g'ri javob 500 ochko beradi, tezlik uchun yana 500 tagacha qo'shiladi. Qancha tez javob bersangiz, shuncha ko'p. Noto'g'ri javob 0 ochko.</p></details>
+      <details class="card" data-reveal><summary>Natijalarni saqlab qolsa bo'ladimi?</summary><p>Ha. Taqdimot ekranidagi "CSV" tugmasi barcha javoblarni Excel'da ochiladigan faylga yuklaydi.</p></details>
+    </div>
+  </section>
+
+  <section class="card cta-final" data-reveal>
+    <h2>Keyingi taqdimotingizni <span class="grad-text">esda qolarli</span> qiling</h2>
+    <p class="muted">Bir daqiqada birinchi so'rovnomangizni yarating.</p>
+    <a class="btn primary lg" href="/dashboard.html">Bepul boshlash →</a>
+  </section>
+</main>
+<footer class="footer"><div class="container row"><span>© <span id="year"></span> Sado Live</span><span class="spacer"></span><a href="#join">Qo'shilish</a><a href="/auth.html">Kirish</a></div></footer>
+</body>
+</html>

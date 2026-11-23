@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Taqdimot — Sado</title>
+  <meta name="description" content="Sado — auditoriya bilan jonli muloqot: so'rovnomalar, viktorinalar, so'z buluti va savol-javob." />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Unbounded:wght@500;600;700;800&display=swap" />
+  <script type="module" src="/src/pages/present.js"></script>
+</head>
+<body>
+<div class="present">
+  <div class="present-top">
+    <div class="join-info">Kirish: <b id="join-host"></b> · Kod: <span class="join-code" id="join-code"></span></div>
+    <img class="qr-mini" id="qr-mini" alt="QR kod" />
+    <span class="spacer"></span>
+    <span class="badge" id="count-badge">👥 0</span>
+    <span class="badge" id="state-badge"></span>
+  </div>
+  <main class="stage" id="stage"><div class="spinner"></div></main>
+  <div class="controls">
+    <button class="btn ghost sm" id="prev" title="Oldingi (←)">←</button>
+    <span class="counter" id="counter">0 / 0</span>
+    <button class="btn ghost sm" id="next" title="Keyingi (→)">→</button>
+    <span class="spacer"></span>
+    <span class="row" id="slide-actions"></span>
+    <span class="spacer"></span>
+    <button class="btn ghost sm" id="lb-btn">🏆 Reyting</button>
+    <button class="btn ghost sm" id="qr-btn">QR</button>
+    <button class="btn ghost sm" id="csv-btn">CSV</button>
+    <button class="icon-btn" data-theme-toggle aria-label="Mavzu">◐</button>
+    <button class="btn ghost sm" id="fs-btn" title="To'liq ekran (F)">⛶</button>
+    <button class="btn danger sm" id="end-btn">Tugatish</button>
+  </div>
+</div>
+</body>
+</html>

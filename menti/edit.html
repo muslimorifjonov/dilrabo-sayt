@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Tahrirlash — Sado</title>
+  <meta name="description" content="Sado — auditoriya bilan jonli muloqot: so'rovnomalar, viktorinalar, so'z buluti va savol-javob." />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Unbounded:wght@500;600;700;800&display=swap" />
+  <script type="module" src="/src/pages/edit.js"></script>
+</head>
+<body>
+<header class="topbar"><div class="container">
+  <a class="icon-btn" href="/dashboard.html" aria-label="Orqaga">←</a>
+  <input class="input title-input" id="title" maxlength="120" aria-label="Taqdimot nomi" />
+  <span class="save-state" id="save-state"></span>
+  <span class="spacer"></span>
+  <button class="icon-btn" data-theme-toggle aria-label="Mavzuni almashtirish">◐</button>
+  <a class="btn primary" id="present-btn" href="#">▶ Taqdimot qilish</a>
+</div></header>
+<main class="container editor">
+  <aside>
+    <div class="slide-list" id="slides"></div>
+    <button class="btn ghost block" id="add-slide" style="margin-top:10px">+ Slayd qo'shish</button>
+  </aside>
+  <section id="panel"><div class="spinner"></div></section>
+</main>
+</body>
+</html>

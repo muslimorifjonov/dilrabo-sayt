@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Kirish — Sado</title>
+  <meta name="description" content="Sado — auditoriya bilan jonli muloqot: so'rovnomalar, viktorinalar, so'z buluti va savol-javob." />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Unbounded:wght@500;600;700;800&display=swap" />
+  <script type="module" src="/src/pages/auth.js"></script>
+</head>
+<body>
+<header class="topbar"><div class="container"><a class="logo" href="/"><i></i>Sado<small>Live</small></a><span class="spacer"></span><nav class="row" id="nav"></nav><button class="icon-btn" data-theme-toggle aria-label="Mavzuni almashtirish">◐</button></div></header>
+<main class="container auth-wrap">
+  <section class="auth-side" data-reveal>
+    <span class="eyebrow">Taqdimotchilar uchun</span>
+    <h1>Auditoriyangiz bilan <span class="grad-text">jonli muloqot</span> shu yerdan boshlanadi</h1>
+    <ul>
+      <li><span class="i">⚡</span><div><b>Bir daqiqada tayyor</b>Tayyor shablonlardan birini tanlang yoki noldan yarating.</div></li>
+      <li><span class="i">📱</span><div><b>Tinglovchilarga faqat kod kerak</b>Ular ro'yxatdan o'tmaydi, ilova o'rnatmaydi.</div></li>
+      <li><span class="i">🔒</span><div><b>Ma'lumotlaringiz himoyalangan</b>Taqdimot va natijalarni faqat siz ko'rasiz.</div></li>
+    </ul>
+  </section>
+  <div class="card auth-card" data-reveal>
+    <h2 id="auth-title">Xush kelibsiz!</h2>
+    <p class="muted small" id="auth-sub" style="margin:0">Taqdimotlaringizni boshqarish uchun hisobingizga kiring.</p>
+    <div class="tabs" role="tablist">
+      <button type="button" role="tab" aria-selected="true" data-mode="login">Kirish</button>
+      <button type="button" role="tab" aria-selected="false" data-mode="signup">Ro'yxatdan o'tish</button>
+    </div>
+    <form id="auth-form" class="stack" novalidate>
+      <div id="name-field" hidden><label for="name">Ismingiz</label><input class="input" id="name" autocomplete="name" maxlength="60" placeholder="Masalan: Dilnoza" /></div>
+      <div><label for="email">Email manzil</label><input class="input" id="email" type="email" autocomplete="email" placeholder="siz@example.com" required /></div>
+      <div>
+        <label for="password">Parol</label>
+        <div class="pw-wrap"><input class="input" id="password" type="password" autocomplete="current-password" minlength="8" placeholder="Kamida 8 ta belgi" required /><button type="button" id="pw-toggle" aria-label="Parolni ko'rsatish">Ko'rsatish</button></div>
+      </div>
+      <button class="btn primary block lg" type="submit" id="submit">Kirish</button>
+      <p class="small center" style="margin-bottom:0"><a href="#" id="forgot">Parolni unutdingizmi?</a></p>
+    </form>
+  </div>
+</main>
+</body>
+</html>

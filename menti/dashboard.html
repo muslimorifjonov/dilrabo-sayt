@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Taqdimotlarim — Sado</title>
+  <meta name="description" content="Sado — auditoriya bilan jonli muloqot: so'rovnomalar, viktorinalar, so'z buluti va savol-javob." />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Unbounded:wght@500;600;700;800&display=swap" />
+  <script type="module" src="/src/pages/dashboard.js"></script>
+</head>
+<body>
+<header class="topbar"><div class="container"><a class="logo" href="/"><i></i>Sado<small>Live</small></a><span class="spacer"></span><nav class="row" id="nav"></nav><button class="icon-btn" data-theme-toggle aria-label="Mavzuni almashtirish">◐</button></div></header>
+<main class="container">
+  <section class="dash-hero">
+    <div>
+      <span class="eyebrow">Boshqaruv paneli</span>
+      <h1 id="greet">Salom! 👋</h1>
+      <p>Bugun auditoriyangizga nima savol berasiz?</p>
+    </div>
+    <span class="spacer"></span>
+    <button class="btn primary lg" id="new-btn">+ Yangi taqdimot</button>
+  </section>
+
+  <section class="stats" aria-label="Statistika">
+    <div class="card stat"><div class="ico">🗂️</div><div><b data-stat="pres">0</b><span>Taqdimotlar</span></div></div>
+    <div class="card stat"><div class="ico">🧩</div><div><b data-stat="slides">0</b><span>Jami slaydlar</span></div></div>
+    <div class="card stat"><div class="ico">👥</div><div><b data-stat="people">0</b><span>Jami ishtirokchilar</span></div></div>
+    <div class="card stat"><div class="ico">🔴</div><div><b data-stat="live">0</b><span>Hozir jonli</span></div></div>
+  </section>
+
+  <section>
+    <div class="block-title"><h2>Tez boshlash</h2><span class="muted small">Shablonni bosing: savollar tayyor, faqat o'zingizga moslang. Keraksizini ✕ bilan o'chiring.</span></div>
+    <div class="templates" id="templates"></div>
+    <div class="tpl-footer" id="tpl-footer"></div>
+  </section>
+
+  <section>
+    <div class="block-title">
+      <h2>Taqdimotlarim</h2><span class="spacer"></span>
+      <input class="input" id="search" type="search" placeholder="Nomi yoki kodi bo'yicha qidirish…" style="max-width:300px" aria-label="Qidirish" />
+    </div>
+    <div id="list"><div class="grid"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div></div>
+  </section>
+  <div style="height:64px"></div>
+</main>
+</body>
+</html>
